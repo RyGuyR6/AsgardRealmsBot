@@ -1,5 +1,5 @@
 import discord
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class TicketLogService:
@@ -26,13 +26,14 @@ class TicketLogService:
 
         embed = discord.Embed(
             title="🎫 Ticket Closed",
+            description="A support ticket has been closed.",
             color=discord.Color.red(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
 
         embed.add_field(
             name="Ticket",
-            value=ticket_channel.name,
+            value=f"`{ticket_channel.name}`",
             inline=False
         )
 
@@ -48,35 +49,40 @@ class TicketLogService:
             inline=True
         )
 
-        if claimed_by is not None:
-            embed.add_field(
-                name="Claimed By",
-                value=claimed_by.mention,
-                inline=True
-            )
+        embed.add_field(
+            name="Claimed By",
+            value=claimed_by.mention if claimed_by else "*Unclaimed*",
+            inline=True
+        )
 
-        if opened_at is not None:
+        if opened_at:
+
+            if opened_at.tzinfo is not None:
+                opened_at = opened_at.astimezone(timezone.utc).replace(tzinfo=None)
 
             duration = datetime.utcnow() - opened_at
 
-            hours, remainder = divmod(
-                int(duration.total_seconds()),
-                3600
-            )
+            total = int(duration.total_seconds())
 
-            minutes, seconds = divmod(
-                remainder,
-                60
-            )
+            days, rem = divmod(total, 86400)
+            hours, rem = divmod(rem, 3600)
+            minutes, seconds = divmod(rem, 60)
+
+            if days:
+                duration_text = f"{days}d {hours}h {minutes}m"
+            elif hours:
+                duration_text = f"{hours}h {minutes}m"
+            else:
+                duration_text = f"{minutes}m {seconds}s"
 
             embed.add_field(
                 name="Duration",
-                value=f"{hours}h {minutes}m {seconds}s",
+                value=duration_text,
                 inline=False
             )
 
         embed.set_footer(
-            text="Odin Ticket System"
+            text="⚔ Odin Ticket System"
         )
 
         if transcript:
