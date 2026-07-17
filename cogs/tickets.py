@@ -28,69 +28,68 @@ def register(bot):
             "⚔ Odin Support Center",
 
             """
-# Welcome to Asgard Realms!
-
-Need help? Choose the button below that best matches your issue.
+Choose the support option that best matches your issue.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## 🎫 General Support
-Questions about gameplay, commands, ranks, quests, or anything server related.
+🎫 **General Support**
+Gameplay questions, commands, quests, ranks, or general assistance.
 
-## 🐞 Bug Reports
-Found a bug, exploit, or broken feature?
-Report it here so our developers can investigate.
+🐞 **Bug Reports**
+Report bugs, exploits, glitches, or broken features.
 
-## ⚠️ Player Reports
-Report cheating, griefing, harassment, or rule violations.
+⚠️ **Player Reports**
+Report griefing, cheating, harassment, or rule violations.
 
-## 💳 Purchase Support
-Issues involving purchases, donations, ranks, or the webstore.
+💳 **Purchase Support**
+Issues involving purchases, donations, store ranks, or the webstore.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## 📋 Before Opening a Ticket
+### 📋 Before Opening a Ticket
 
-⚔ One issue per ticket.
+• One issue per ticket.
 
-📸 Include screenshots whenever possible.
+• Explain your issue clearly.
 
-📝 Explain your issue clearly.
+• Include screenshots whenever possible.
 
-🤝 Please remain respectful to staff.
+• Please remain respectful to staff.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🟢 **Support Status**
-Staff Available
+Online
 
-⏱ **Average Response**
+⏱ **Average Response Time**
 Usually within **15–30 minutes**
 
-Thank you for supporting **Asgard Realms**.
+Click one of the buttons below to create your support ticket.
 
-May Odin guide your journey.
+⚔ May Odin guide your journey.
 """
         )
 
+        # Load the banner image from the assets folder
         file = discord.File(
-            "assets/odin_logo.PNG",
-            filename="odin_logo.PNG"
+            "assets/odin_banner.PNG",
+            filename="odin_banner.PNG"
         )
 
+        # Display the banner at the top of the embed
         embed.set_image(
-            url="attachment://odin_logo.PNG"
+            url="attachment://odin_banner.PNG"
         )
 
         embed.add_field(
-            name="🟢 Staff Status",
-            value="Online",
+            name="🎟 Ticket System",
+            value="Open 24/7",
             inline=True
         )
 
         embed.add_field(
-            name="⚔ Support",
-            value="Open 24/7",
+            name="🛡 Staff Status",
+            value="Ready to Assist",
             inline=True
         )
 
@@ -101,7 +100,7 @@ May Odin guide your journey.
         )
 
         embed.set_footer(
-            text="⚔ Asgard Realms • Powered by Odin"
+            text="⚔ Asgard Realms • Guardian of the Nine Realms"
         )
 
         await interaction.response.send_message(
