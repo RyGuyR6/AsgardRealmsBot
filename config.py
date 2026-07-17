@@ -6,7 +6,7 @@
 import os
 
 BOT_NAME = "Odin"
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 
 # ============================================================
 # Discord Bot Token
@@ -25,6 +25,15 @@ if TOKEN is None:
 
 SERVER_NAME = "Asgard Realms"
 SERVER_IP = "76.164.198.116:25569"
+SERVER_VERSION = "1.21.6"
+
+# ============================================================
+# Welcome System
+# ============================================================
+
+WELCOME_CHANNEL = "👋welcome"
+WELCOME_BANNER = "assets/odin_welcome.PNG"
+DEFAULT_ROLE = "🧭 Traveler"
 
 # ============================================================
 # Embed Settings
@@ -55,6 +64,7 @@ ROLES = [
 TEXT_CATEGORIES = {
 
     "📢 INFORMATION": [
+        "👋welcome",
         "📜rules",
         "📚server-guide",
         "📣announcements",
@@ -88,7 +98,6 @@ TEXT_CATEGORIES = {
         "💡suggestions"
     ],
 
-    # Ticket channels are created dynamically by Odin.
     "🎫 TICKETS": [],
 
     "🔒 STAFF": [
@@ -97,9 +106,9 @@ TEXT_CATEGORIES = {
         "📊server-logs"
     ],
 
-    # Internal Odin channels
     "🤖 ODIN": [
-        "📋ticket-logs"
+        "📋ticket-logs",
+        "⚔odin-logs"
     ]
 }
 
