@@ -22,6 +22,7 @@ from embeds import make_embed
 
 from cogs.server_setup import register as register_setup
 from cogs.tickets import register as register_tickets
+from cogs.welcome import register as register_welcome
 
 # ============================================================
 #                        LOGGING
@@ -59,6 +60,7 @@ bot = commands.Bot(
 
 register_setup(bot)
 register_tickets(bot)
+register_welcome(bot)
 
 # ============================================================
 #                        EVENTS
