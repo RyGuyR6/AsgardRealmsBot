@@ -10,8 +10,6 @@ from datetime import datetime, UTC
 import discord
 
 from config import SERVER_NAME
-from views.ticket_manage import TicketManageView
-
 
 TICKET_FILE = "data/ticket_counter.json"
 
@@ -34,7 +32,6 @@ def load_ticket_data():
             )
 
     with open(TICKET_FILE, "r") as file:
-
         data = json.load(file)
 
     data.setdefault("next_ticket", 1)
@@ -46,7 +43,6 @@ def load_ticket_data():
 def save_ticket_data(data):
 
     with open(TICKET_FILE, "w") as file:
-
         json.dump(data, file, indent=4)
 
 
@@ -121,6 +117,9 @@ async def create_ticket(
     ticket_type: str
 ):
 
+    # Import here to avoid circular imports
+    from views.ticket_manage import TicketManageView
+
     guild = interaction.guild
     user = interaction.user
 
@@ -140,23 +139,20 @@ async def create_ticket(
     channel_name = f"ticket-{ticket_number:04}"
 
     overwrites = {
-
-        guild.default_role:
-            discord.PermissionOverwrite(view_channel=False),
-
-        user:
-            discord.PermissionOverwrite(
-                view_channel=True,
-                send_messages=True,
-                read_message_history=True
-            )
-
+        guild.default_role: discord.PermissionOverwrite(
+            view_channel=False
+        ),
+        user: discord.PermissionOverwrite(
+            view_channel=True,
+            send_messages=True,
+            read_message_history=True
+        )
     }
 
     for role_name in (
         "👑 Allfather",
         "🛡 Administrator",
-        "⚔ Moderator"
+        "⚔ Moderator",
     ):
 
         role = discord.utils.get(guild.roles, name=role_name)
@@ -184,19 +180,11 @@ async def create_ticket(
 
     embed = discord.Embed(
         title=f"⚔ Ticket #{ticket_number:04}",
-        description=f"""
-Welcome {user.mention}!
-
-Your ticket has been created.
-
-**Category**
-
-{ticket_type}
-
-A staff member will assist you shortly.
-
-Thank you for supporting **{SERVER_NAME}**.
-""",
+        description=(
+            f"Welcome {user.mention}!\n\n"
+            f"**Category:** {ticket_type}\n\n"
+            "A staff member will assist you shortly."
+        ),
         color=0x3B82F6
     )
 
