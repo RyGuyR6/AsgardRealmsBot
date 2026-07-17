@@ -10,6 +10,7 @@ from config import (
     FOOTER,
     SERVER_NAME,
     SERVER_IP,
+    SERVER_VERSION,
 )
 
 
@@ -31,6 +32,67 @@ def make_embed(title: str, description: str):
 
     embed.set_footer(
         text=FOOTER
+    )
+
+    return embed
+
+
+# ============================================================
+#                     WELCOME EMBED
+# ============================================================
+
+def welcome_embed(member=None):
+
+    if member is None:
+        player = "Adventurer"
+    else:
+        player = member.mention
+
+    embed = make_embed(
+        "⚔ Odin Welcomes You to Asgard Realms",
+        f"""
+Welcome, {player}.
+
+# Your journey begins now.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 🎮 Server Information
+
+**Minecraft Version**
+`{SERVER_VERSION}`
+
+**Server IP**
+`{SERVER_IP}`
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### Before setting out
+
+📜 Read the server rules.
+
+💬 Introduce yourself to the community.
+
+🎮 Join the Minecraft server and begin your adventure.
+
+🎫 Need help?
+
+Visit the **Odin Support Center**.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Forge alliances.
+
+Build your legacy.
+
+Become a legend.
+
+*May Odin guide your path through the Nine Realms.*
+"""
+    )
+
+    embed.set_image(
+        url="attachment://odin_welcome.PNG"
     )
 
     return embed
