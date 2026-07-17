@@ -1,6 +1,6 @@
 # ============================================================
 #                     ASGARD REALMS BOT
-#                        utils.py
+#                    utils/helpers.py
 # ============================================================
 
 import logging
@@ -81,15 +81,56 @@ async def create_text_channel(category, channel_name):
         name=channel_name
     )
 
-    if channel is None:
-
-        channel = await category.create_text_channel(channel_name)
-
-        log.info(f"✅ Created channel: {channel_name}")
-
-    else:
+    if channel is not None:
 
         log.info(f"✔ Channel exists: {channel_name}")
+        return channel
+
+    guild = category.guild
+
+    overwrites = None
+
+    # ========================================================
+    # Private Odin Ticket Logs
+    # ========================================================
+
+    if channel_name == "📋ticket-logs":
+
+        overwrites = {
+
+            guild.default_role:
+                discord.PermissionOverwrite(
+                    view_channel=False
+                )
+        }
+
+        for role_name in [
+            "👑 Allfather",
+            "🛡 Administrator",
+            "⚔ Moderator"
+        ]:
+
+            role = get_role(guild, role_name)
+
+            if role:
+
+                overwrites[role] = discord.PermissionOverwrite(
+                    view_channel=True,
+                    send_messages=True,
+                    read_message_history=True,
+                    attach_files=True
+                )
+
+    # ========================================================
+    # Create Channel
+    # ========================================================
+
+    channel = await category.create_text_channel(
+        channel_name,
+        overwrites=overwrites
+    )
+
+    log.info(f"✅ Created channel: {channel_name}")
 
     return channel
 
