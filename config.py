@@ -3,6 +3,8 @@
 #                       config.py
 # ============================================================
 
+import os
+
 BOT_NAME = "Odin"
 VERSION = "2.0.0"
 
@@ -10,7 +12,12 @@ VERSION = "2.0.0"
 # Discord Bot Token
 # ============================================================
 
-TOKEN = "MTUyNzU0OTI2MTQxNDQwNDEwNg.GyV7Rp.fXUc5Illrsv_b5fl7Mk_pERL-3QE8fhZoRCFYQ"
+TOKEN = os.getenv("TOKEN")
+
+if TOKEN is None:
+    raise ValueError(
+        "Discord bot token not found. Set the TOKEN environment variable."
+    )
 
 # ============================================================
 # Server Information
@@ -31,23 +38,14 @@ FOOTER = "⚔ Forge Your Saga"
 # ============================================================
 
 ROLES = [
-
     "👑 Allfather",
-
     "🛡 Administrator",
-
     "⚔ Moderator",
-
     "👑 Jarl",
-
     "🪓 Berserker",
-
     "🛶 Raider",
-
     "🧭 Traveler",
-
     "🤖 Herald"
-
 ]
 
 # ============================================================
@@ -55,81 +53,47 @@ ROLES = [
 # ============================================================
 
 TEXT_CATEGORIES = {
-
     "📢 INFORMATION": [
-
         "📜rules",
-
         "📚server-guide",
-
         "📣announcements",
-
         "📋patch-notes",
-
         "🛠development-log",
-
         "📅events",
-
         "🗳polls"
-
     ],
 
     "💬 COMMUNITY": [
-
         "💬general",
-
         "😂memes",
-
         "📸screenshots",
-
         "🎨media",
-
         "🏰showcase-builds"
-
     ],
 
     "🎮 MINECRAFT": [
-
         "🟢server-status",
-
         "👥online-players",
-
         "💰economy",
-
         "🏆leaderboards",
-
         "🎁crates",
-
         "📜quests",
-
         "⚔pvp"
-
     ],
 
     "🛡 SUPPORT": [
-
         "❓help",
-
         "🐞bug-reports",
-
         "💡suggestions"
-
     ],
 
-    "🎫 TICKETS": [
-
-    ],
+    "🎫 TICKETS": [],
 
     "🔒 STAFF": [
-
         "🛡staff-chat",
-
         "📜staff-notes",
-
         "📊server-logs"
-
     ]
-
 }
 
 # ============================================================
@@ -137,13 +101,8 @@ TEXT_CATEGORIES = {
 # ============================================================
 
 VOICE_CHANNELS = [
-
     "⚔ Midgard",
-
     "⚔ Asgard",
-
     "⚔ Valhalla",
-
     "🌙 AFK"
-
 ]
