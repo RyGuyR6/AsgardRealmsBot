@@ -30,72 +30,64 @@ def register(bot):
             """
 # Welcome to Asgard Realms!
 
-Need help? Choose the button below that best matches your issue.
+Need help? Select the option below that best matches your issue.
 
-━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## 🎫 General Support
-Questions about gameplay, commands, ranks, or anything server related.
+Questions about gameplay, commands, ranks, quests, or anything server related.
 
 ## 🐞 Bug Reports
-Found a bug, exploit, or broken feature?
-Let us know so we can fix it.
+Found a bug or exploit?
+Report it here so our developers can investigate.
 
 ## ⚠️ Player Reports
-Report cheating, harassment, griefing, or rule violations.
+Report cheating, griefing, harassment, or rule violations.
 
-## 💳 Store Support
-Problems with purchases, ranks, donations, or the webstore.
+## 💳 Purchase Support
+Issues involving purchases, donations, ranks, or the webstore.
 
-━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## 📋 Before Opening a Ticket
 
-• One issue per ticket.
+⚔ One issue per ticket.
 
-• Explain your issue clearly.
+📸 Include screenshots whenever possible.
 
-• Include screenshots if possible.
+📝 Explain your issue clearly.
 
-• Please be patient while waiting for staff.
+🤝 Please remain respectful to staff.
 
-━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-⏱ **Average Response Time**
-**Usually within 15–30 minutes**
+🟢 **Support Status**
+Staff Available
 
-Thank you for supporting **Asgard Realms**!
+⏱ **Average Response**
+Usually within **15–30 minutes**
+
+Thank you for supporting **Asgard Realms**.
+
+May Odin guide your journey.
 """
+        )
 
+        file = discord.File(
+            "assets/odin_logo.png",
+            filename="odin_logo.png"
         )
 
         embed.set_thumbnail(
-            url="https://cdn.discordapp.com/emojis/⚔️.png"
-        )
-
-        embed.add_field(
-            name="🟢 Ticket Status",
-            value="Support Team Online",
-            inline=True
-        )
-
-        embed.add_field(
-            name="🎟 Open Tickets",
-            value="Unlimited",
-            inline=True
-        )
-
-        embed.add_field(
-            name="🤖 Powered By",
-            value="Odin",
-            inline=True
+            url="attachment://odin_logo.png"
         )
 
         embed.set_footer(
-            text="⚔ Asgard Realms • Odin Ticket System"
+            text="⚔ Asgard Realms • Powered by Odin"
         )
 
         await interaction.response.send_message(
             embed=embed,
-            view=TicketView()
+            view=TicketView(),
+            file=file
         )
