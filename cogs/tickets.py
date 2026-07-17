@@ -30,7 +30,7 @@ def register(bot):
             """
 # Welcome to Asgard Realms!
 
-Need help? Select the option below that best matches your issue.
+Need help? Choose the button below that best matches your issue.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -38,7 +38,7 @@ Need help? Select the option below that best matches your issue.
 Questions about gameplay, commands, ranks, quests, or anything server related.
 
 ## 🐞 Bug Reports
-Found a bug or exploit?
+Found a bug, exploit, or broken feature?
 Report it here so our developers can investigate.
 
 ## ⚠️ Player Reports
@@ -74,12 +74,30 @@ May Odin guide your journey.
         )
 
         file = discord.File(
-            "assets/odin_logo.png",
-            filename="odin_logo.png"
+            "assets/odin_logo.PNG",
+            filename="odin_logo.PNG"
         )
 
-        embed.set_thumbnail(
-            url="attachment://odin_logo.png"
+        embed.set_image(
+            url="attachment://odin_logo.PNG"
+        )
+
+        embed.add_field(
+            name="🟢 Staff Status",
+            value="Online",
+            inline=True
+        )
+
+        embed.add_field(
+            name="⚔ Support",
+            value="Open 24/7",
+            inline=True
+        )
+
+        embed.add_field(
+            name="🤖 Powered By",
+            value="Odin",
+            inline=True
         )
 
         embed.set_footer(
