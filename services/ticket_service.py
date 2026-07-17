@@ -5,16 +5,13 @@
 
 import json
 import os
+from datetime import datetime, UTC
 
 import discord
 
 from config import SERVER_NAME
-from views.ticket_views import TicketManageView
+from views.ticket_manage import TicketManageView
 
-
-# ============================================================
-#                  TICKET DATABASE
-# ============================================================
 
 TICKET_FILE = "data/ticket_counter.json"
 
@@ -23,11 +20,14 @@ def load_ticket_data():
 
     if not os.path.exists(TICKET_FILE):
 
+        os.makedirs("data", exist_ok=True)
+
         with open(TICKET_FILE, "w") as file:
 
             json.dump(
                 {
-                    "next_ticket": 1
+                    "next_ticket": 1,
+                    "tickets": {}
                 },
                 file,
                 indent=4
@@ -35,18 +35,19 @@ def load_ticket_data():
 
     with open(TICKET_FILE, "r") as file:
 
-        return json.load(file)
+        data = json.load(file)
+
+    data.setdefault("next_ticket", 1)
+    data.setdefault("tickets", {})
+
+    return data
 
 
 def save_ticket_data(data):
 
     with open(TICKET_FILE, "w") as file:
 
-        json.dump(
-            data,
-            file,
-            indent=4
-        )
+        json.dump(data, file, indent=4)
 
 
 def get_next_ticket_number():
@@ -62,9 +63,50 @@ def get_next_ticket_number():
     return number
 
 
-# ============================================================
-#                  FIND CATEGORY
-# ============================================================
+def save_ticket_metadata(channel_id, creator_id, ticket_number, ticket_type):
+
+    data = load_ticket_data()
+
+    data["tickets"][str(channel_id)] = {
+        "ticket_number": ticket_number,
+        "creator": creator_id,
+        "ticket_type": ticket_type,
+        "claimed_by": None,
+        "opened_at": datetime.now(UTC).isoformat()
+    }
+
+    save_ticket_data(data)
+
+
+def get_ticket_metadata(channel_id):
+
+    data = load_ticket_data()
+
+    return data["tickets"].get(str(channel_id))
+
+
+def update_ticket_metadata(channel_id, **updates):
+
+    data = load_ticket_data()
+
+    ticket = data["tickets"].get(str(channel_id))
+
+    if ticket is None:
+        return
+
+    ticket.update(updates)
+
+    save_ticket_data(data)
+
+
+def remove_ticket_metadata(channel_id):
+
+    data = load_ticket_data()
+
+    data["tickets"].pop(str(channel_id), None)
+
+    save_ticket_data(data)
+
 
 def get_ticket_category(guild):
 
@@ -73,10 +115,6 @@ def get_ticket_category(guild):
         name="🎫 TICKETS"
     )
 
-
-# ============================================================
-#                  CREATE TICKET
-# ============================================================
 
 async def create_ticket(
     interaction: discord.Interaction,
@@ -104,9 +142,7 @@ async def create_ticket(
     overwrites = {
 
         guild.default_role:
-            discord.PermissionOverwrite(
-                view_channel=False
-            ),
+            discord.PermissionOverwrite(view_channel=False),
 
         user:
             discord.PermissionOverwrite(
@@ -117,22 +153,13 @@ async def create_ticket(
 
     }
 
-    staff_roles = [
-
+    for role_name in (
         "👑 Allfather",
-
         "🛡 Administrator",
-
         "⚔ Moderator"
+    ):
 
-    ]
-
-    for role_name in staff_roles:
-
-        role = discord.utils.get(
-            guild.roles,
-            name=role_name
-        )
+        role = discord.utils.get(guild.roles, name=role_name)
 
         if role:
 
@@ -146,6 +173,13 @@ async def create_ticket(
         name=channel_name,
         category=category,
         overwrites=overwrites
+    )
+
+    save_ticket_metadata(
+        channel.id,
+        user.id,
+        ticket_number,
+        ticket_type
     )
 
     embed = discord.Embed(
