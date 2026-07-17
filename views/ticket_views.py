@@ -6,15 +6,10 @@
 import discord
 
 
-# ============================================================
-#                  TICKET CREATION VIEW
-# ============================================================
-
 class TicketView(discord.ui.View):
 
     def __init__(self):
         super().__init__(timeout=None)
-
 
     async def create_ticket(
         self,
@@ -29,7 +24,6 @@ class TicketView(discord.ui.View):
             ticket_type
         )
 
-
     @discord.ui.button(
         label="General Support",
         emoji="🎫",
@@ -38,15 +32,14 @@ class TicketView(discord.ui.View):
     )
     async def general_support(
         self,
-        interaction,
-        button
+        interaction: discord.Interaction,
+        button: discord.ui.Button
     ):
 
         await self.create_ticket(
             interaction,
             "General Support"
         )
-
 
     @discord.ui.button(
         label="Bug Report",
@@ -56,15 +49,14 @@ class TicketView(discord.ui.View):
     )
     async def bug_report(
         self,
-        interaction,
-        button
+        interaction: discord.Interaction,
+        button: discord.ui.Button
     ):
 
         await self.create_ticket(
             interaction,
             "Bug Report"
         )
-
 
     @discord.ui.button(
         label="Player Report",
@@ -74,15 +66,14 @@ class TicketView(discord.ui.View):
     )
     async def player_report(
         self,
-        interaction,
-        button
+        interaction: discord.Interaction,
+        button: discord.ui.Button
     ):
 
         await self.create_ticket(
             interaction,
             "Player Report"
         )
-
 
     @discord.ui.button(
         label="Purchase Support",
@@ -92,8 +83,8 @@ class TicketView(discord.ui.View):
     )
     async def purchase_support(
         self,
-        interaction,
-        button
+        interaction: discord.Interaction,
+        button: discord.ui.Button
     ):
 
         await self.create_ticket(
@@ -102,18 +93,10 @@ class TicketView(discord.ui.View):
         )
 
 
-# ============================================================
-#                  CLOSE CONFIRM VIEW
-# ============================================================
-
 class CloseConfirmView(discord.ui.View):
 
     def __init__(self):
-
-        super().__init__(
-            timeout=60
-        )
-
+        super().__init__(timeout=60)
 
     @discord.ui.button(
         label="Confirm",
@@ -121,10 +104,9 @@ class CloseConfirmView(discord.ui.View):
         style=discord.ButtonStyle.danger
     )
     async def confirm(
-
         self,
-        interaction,
-        button
+        interaction: discord.Interaction,
+        button: discord.ui.Button
     ):
 
         await interaction.response.send_message(
@@ -134,111 +116,20 @@ class CloseConfirmView(discord.ui.View):
 
         await interaction.channel.delete()
 
-
     @discord.ui.button(
         label="Cancel",
         emoji="❌",
         style=discord.ButtonStyle.secondary
     )
     async def cancel(
-
         self,
-        interaction,
-        button
+        interaction: discord.Interaction,
+        button: discord.ui.Button
     ):
 
         await interaction.response.send_message(
-            "Cancelled.",
+            "Ticket close cancelled.",
             ephemeral=True
         )
 
         self.stop()
-
-
-# ============================================================
-#                  TICKET MANAGEMENT VIEW
-# ============================================================
-
-class TicketManageView(discord.ui.View):
-
-    def __init__(self):
-
-        super().__init__(
-            timeout=None
-        )
-
-
-    @discord.ui.button(
-        label="Claim Ticket",
-        emoji="👤",
-        style=discord.ButtonStyle.primary,
-        custom_id="ticket_claim"
-    )
-    async def claim_ticket(
-
-        self,
-        interaction,
-        button
-
-    ):
-
-        embed = discord.Embed(
-
-            title="⚔ Ticket Claimed",
-
-            description=f"""
-Assigned Staff:
-
-{interaction.user.mention}
-
-Status:
-
-🟢 Being handled
-""",
-
-            color=0x3B82F6
-
-        )
-
-
-        await interaction.response.send_message(
-            embed=embed
-        )
-
-
-    @discord.ui.button(
-        label="Close Ticket",
-        emoji="🔒",
-        style=discord.ButtonStyle.danger,
-        custom_id="ticket_close"
-    )
-    async def close_ticket(
-
-        self,
-        interaction,
-        button
-
-    ):
-
-        embed = discord.Embed(
-
-            title="⚔ Close Ticket?",
-
-            description="""
-Are you sure you want to close this ticket?
-
-This action cannot be undone.
-""",
-
-            color=0xFF0000
-
-        )
-
-
-        await interaction.response.send_message(
-
-            embed=embed,
-
-            view=CloseConfirmView()
-
-        )
