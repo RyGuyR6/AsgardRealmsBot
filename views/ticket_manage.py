@@ -5,7 +5,7 @@
 
 import discord
 
-from views.ticket_views import CloseConfirmView
+from views.ticket_manage import CloseConfirmView
 
 
 class TicketManageView(discord.ui.View):
