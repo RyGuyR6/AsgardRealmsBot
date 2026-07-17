@@ -10,101 +10,52 @@ from views.ticket_views import TicketView
 
 
 # ============================================================
-#              REGISTER TICKET COMMANDS
+#                  REGISTER COMMANDS
 # ============================================================
 
 def register(bot):
 
     @bot.tree.command(
         name="ticketpanel",
-        description="Post the Odin support panel."
+        description="Post the Odin Support Center."
     )
-    async def ticketpanel(
-        interaction: discord.Interaction
-    ):
+    async def ticketpanel(interaction: discord.Interaction):
 
         embed = make_embed(
-
             "⚔ Odin Support Center",
-
             """
-Choose the support option that best matches your issue.
+Need assistance? Choose the ticket type below to get started.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🎫 **General Support**
-Gameplay questions, commands, quests, ranks, or general assistance.
-
-🐞 **Bug Reports**
-Report bugs, exploits, glitches, or broken features.
-
-⚠️ **Player Reports**
-Report griefing, cheating, harassment, or rule violations.
-
-💳 **Purchase Support**
-Issues involving purchases, donations, store ranks, or the webstore.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-### 📋 Before Opening a Ticket
-
-• One issue per ticket.
-
+• Open one ticket per issue.
 • Explain your issue clearly.
-
-• Include screenshots whenever possible.
-
+• Include screenshots if they help.
 • Please remain respectful to staff.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🟢 **Support Status**
-Online
-
-⏱ **Average Response Time**
-Usually within **15–30 minutes**
-
-Click one of the buttons below to create your support ticket.
+Click one of the buttons below to create your ticket.
 
 ⚔ May Odin guide your journey.
 """
         )
 
-        # Load the banner image from the assets folder
         file = discord.File(
             "assets/odin_banner.PNG",
             filename="odin_banner.PNG"
         )
 
-        # Display the banner at the top of the embed
         embed.set_image(
             url="attachment://odin_banner.PNG"
         )
 
-        embed.add_field(
-            name="🎟 Ticket System",
-            value="Open 24/7",
-            inline=True
-        )
-
-        embed.add_field(
-            name="🛡 Staff Status",
-            value="Ready to Assist",
-            inline=True
-        )
-
-        embed.add_field(
-            name="🤖 Powered By",
-            value="Odin",
-            inline=True
-        )
-
         embed.set_footer(
-            text="⚔ Asgard Realms • Guardian of the Nine Realms"
+            text="Asgard Realms • Powered by Odin"
         )
 
         await interaction.response.send_message(
             embed=embed,
-            view=TicketView(),
-            file=file
+            file=file,
+            view=TicketView()
         )
