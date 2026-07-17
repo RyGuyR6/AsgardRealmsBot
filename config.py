@@ -53,6 +53,7 @@ ROLES = [
 # ============================================================
 
 TEXT_CATEGORIES = {
+
     "📢 INFORMATION": [
         "📜rules",
         "📚server-guide",
@@ -87,12 +88,18 @@ TEXT_CATEGORIES = {
         "💡suggestions"
     ],
 
+    # Ticket channels are created dynamically by Odin.
     "🎫 TICKETS": [],
 
     "🔒 STAFF": [
         "🛡staff-chat",
         "📜staff-notes",
         "📊server-logs"
+    ],
+
+    # Internal Odin channels
+    "🤖 ODIN": [
+        "📋ticket-logs"
     ]
 }
 
