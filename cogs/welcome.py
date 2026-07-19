@@ -123,3 +123,19 @@ Odin will now welcome new adventurers in
             ephemeral=True
 
         )
+
+@bot.event
+async def on_member_join(member):
+
+    settings = welcome_service.settings(member.guild.id)
+
+    role_id = settings.get("autorole")
+
+    if role_id:
+        role = member.guild.get_role(role_id)
+
+        if role:
+            try:
+                await member.add_roles(role, reason="Autorole")
+            except Exception:
+                pass

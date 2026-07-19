@@ -2,6 +2,7 @@ import discord
 
 from services import settings_service
 from views.welcome_setup import WelcomeSetupView
+from views.autorole_setup import AutoroleView
 
 
 class ModLogChannelSelect(discord.ui.ChannelSelect):
@@ -53,8 +54,8 @@ class SetupPanel(discord.ui.View):
         button: discord.ui.Button,
     ):
         await interaction.response.send_message(
-            "Configure welcome settings below.",
-            view=WelcomeSetupView(),
+            "Configure welcome settings and autorole below.",
+            view=AutoroleView(),
             ephemeral=True,
         )
 
