@@ -57,7 +57,7 @@ def register(bot):
                 ephemeral=True
             )
 
-        warning_service.add_warning(
+        warning_id, case_id = warning_service.add_warning(
             interaction.guild.id,
             member.id,
             interaction.user.id,
@@ -87,6 +87,18 @@ def register(bot):
         embed.add_field(
             name="Total Warnings",
             value=str(total)
+        )
+
+        embed.add_field(
+            name="Warning ID",
+            value=f"#{warning_id}",
+            inline=True
+        )
+
+        embed.add_field(
+            name="Case ID",
+            value=f"#{case_id}",
+            inline=True
         )
 
         await interaction.response.send_message(
