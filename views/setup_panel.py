@@ -1,6 +1,7 @@
 import discord
 
 from services import settings_service
+from views.welcome_setup import WelcomeSetupView
 
 
 class ModLogChannelSelect(discord.ui.ChannelSelect):
@@ -52,7 +53,8 @@ class SetupPanel(discord.ui.View):
         button: discord.ui.Button,
     ):
         await interaction.response.send_message(
-            "Coming soon.",
+            "Configure welcome settings below.",
+            view=WelcomeSetupView(),
             ephemeral=True,
         )
 
