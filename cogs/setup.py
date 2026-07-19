@@ -9,54 +9,57 @@ def register(bot):
 
     @bot.tree.command(
         name="setup",
-        description="View the server setup status."
+        description="View Asgard Realms configuration."
     )
     @app_commands.default_permissions(administrator=True)
     async def setup(interaction: discord.Interaction):
 
         settings = settings_service.get(interaction.guild.id)
 
-        def value(v):
-            return f"<#{v}>" if v else "❌ Not Configured"
+        def channel(channel_id):
+            return f"<#{channel_id}>" if channel_id else "❌ Not Configured"
+
+        def role(role_id):
+            return f"<@&{role_id}>" if role_id else "❌ Not Configured"
 
         embed = make_embed(
             "⚙️ Asgard Realms Setup",
-            "Server configuration overview"
+            "Current server configuration"
         )
 
         embed.add_field(
             name="Welcome Channel",
-            value=value(settings["welcome_channel"]),
+            value=channel(settings["welcome_channel"]),
             inline=False
         )
 
         embed.add_field(
             name="Leave Channel",
-            value=value(settings["leave_channel"]),
+            value=channel(settings["leave_channel"]),
             inline=False
         )
 
         embed.add_field(
             name="Moderation Logs",
-            value=value(settings["modlog_channel"]),
+            value=channel(settings["modlog_channel"]),
             inline=False
         )
 
         embed.add_field(
             name="Ticket Category",
-            value=value(settings["ticket_category"]),
+            value=channel(settings["ticket_category"]),
             inline=False
         )
 
         embed.add_field(
             name="Ticket Log Channel",
-            value=value(settings["ticket_log_channel"]),
+            value=channel(settings["ticket_log_channel"]),
             inline=False
         )
 
         embed.add_field(
             name="Autorole",
-            value=f"<@&{settings['autorole']}>" if settings["autorole"] else "❌ Not Configured",
+            value=role(settings["autorole"]),
             inline=False
         )
 
