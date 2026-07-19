@@ -4,11 +4,26 @@ from discord import app_commands
 
 from embeds import make_embed
 from services import warning_service
+from services import modlog_service
 
 
 def register(bot):
 
     warning_service.initialize()
+
+
+    async def _modlog_channel(guild):
+
+        for channel in guild.text_channels:
+            if channel.name.lower() in (
+                "mod-logs",
+                "modlog",
+                "moderation-log",
+                "moderation-logs",
+            ):
+                return channel
+
+        return None
 
 
     @bot.tree.command(
@@ -76,6 +91,42 @@ def register(bot):
 
         await interaction.response.send_message(
             embed=embed
+        )
+
+        await modlog_service.log_action(
+            channel=await _modlog_channel(interaction.guild),
+            action="Timeout",
+            moderator=interaction.user,
+            target=member,
+            reason=reason,
+            color=discord.Color.gold(),
+        )
+
+        await modlog_service.log_action(
+            channel=await _modlog_channel(interaction.guild),
+            action="Ban",
+            moderator=interaction.user,
+            target=member,
+            reason=reason,
+            color=discord.Color.dark_red(),
+        )
+
+        await modlog_service.log_action(
+            channel=await _modlog_channel(interaction.guild),
+            action="Kick",
+            moderator=interaction.user,
+            target=member,
+            reason=reason,
+            color=discord.Color.red(),
+        )
+
+        await modlog_service.log_action(
+            channel=await _modlog_channel(interaction.guild),
+            action="Warn",
+            moderator=interaction.user,
+            target=member,
+            reason=reason,
+            color=discord.Color.orange(),
         )
 
 
@@ -470,210 +521,6 @@ def register(bot):
         embed = make_embed(
             "⏳ Slowmode Updated",
             f"Slowmode set to **{seconds} seconds**."
-        )
-
-        await interaction.response.send_message(
-            embed=embed
-        )
-
-
-
-    # -------------------------------------------------
-    # Shared hierarchy validation
-    # -------------------------------------------------
-
-    def _can_moderate(actor: discord.Member,
-                      target: discord.Member):
-
-        if actor == target:
-            return False, "You cannot moderate yourself."
-
-        if target.guild.owner == target:
-            return False, "You cannot moderate the server owner."
-
-        if actor.guild.owner == actor:
-            return True, None
-
-        if actor.top_role <= target.top_role:
-            return False, (
-                "Target has an equal or higher role."
-            )
-
-        return True, None
-
-
-    @bot.tree.command(
-        name="kick",
-        description="Kick a member."
-    )
-    @app_commands.default_permissions(
-        kick_members=True
-    )
-    async def kick(
-        interaction: discord.Interaction,
-        member: discord.Member,
-        reason: str="No reason provided"
-    ):
-
-        ok,msg = _can_moderate(
-            interaction.user,
-            member
-        )
-
-        if not ok:
-            return await interaction.response.send_message(
-                embed=make_embed(
-                    "⚠ Kick Failed",
-                    msg
-                ),
-                ephemeral=True
-            )
-
-        try:
-            await member.send(
-                f"You were kicked from "
-                f"{interaction.guild.name}\n\n"
-                f"Reason: {reason}"
-            )
-        except Exception:
-            pass
-
-        await member.kick(reason=reason)
-
-        embed = make_embed(
-            "⚔ Member Kicked",
-            f"{member.mention} has been kicked."
-        )
-
-        embed.add_field(
-            name="Moderator",
-            value=interaction.user.mention
-        )
-
-        embed.add_field(
-            name="Reason",
-            value=reason,
-            inline=False
-        )
-
-        await interaction.response.send_message(
-            embed=embed
-        )
-
-
-    @bot.tree.command(
-        name="ban",
-        description="Ban a member."
-    )
-    @app_commands.default_permissions(
-        ban_members=True
-    )
-    async def ban(
-        interaction: discord.Interaction,
-        member: discord.Member,
-        reason: str="No reason provided"
-    ):
-
-        ok,msg = _can_moderate(
-            interaction.user,
-            member
-        )
-
-        if not ok:
-            return await interaction.response.send_message(
-                embed=make_embed(
-                    "⚠ Ban Failed",
-                    msg
-                ),
-                ephemeral=True
-            )
-
-        try:
-            await member.send(
-                f"You were banned from "
-                f"{interaction.guild.name}\n\n"
-                f"Reason: {reason}"
-            )
-        except Exception:
-            pass
-
-        await member.ban(reason=reason)
-
-        embed = make_embed(
-            "🛡 Member Banned",
-            f"{member.mention} has been banned."
-        )
-
-        embed.add_field(
-            name="Moderator",
-            value=interaction.user.mention
-        )
-
-        embed.add_field(
-            name="Reason",
-            value=reason,
-            inline=False
-        )
-
-        await interaction.response.send_message(
-            embed=embed
-        )
-
-
-    @bot.tree.command(
-        name="timeout",
-        description="Timeout a member."
-    )
-    @app_commands.default_permissions(
-        moderate_members=True
-    )
-    async def timeout(
-        interaction: discord.Interaction,
-        member: discord.Member,
-        minutes: int,
-        reason: str="No reason provided"
-    ):
-
-        ok,msg = _can_moderate(
-            interaction.user,
-            member
-        )
-
-        if not ok:
-            return await interaction.response.send_message(
-                embed=make_embed(
-                    "⚠ Timeout Failed",
-                    msg
-                ),
-                ephemeral=True
-            )
-
-        from datetime import timedelta
-
-        await member.timeout(
-            timedelta(minutes=minutes),
-            reason=reason
-        )
-
-        embed = make_embed(
-            "⚔ Member Timed Out",
-            f"{member.mention} has been timed out."
-        )
-
-        embed.add_field(
-            name="Duration",
-            value=f"{minutes} minute(s)"
-        )
-
-        embed.add_field(
-            name="Reason",
-            value=reason,
-            inline=False
-        )
-
-        embed.add_field(
-            name="Moderator",
-            value=interaction.user.mention
         )
 
         await interaction.response.send_message(
