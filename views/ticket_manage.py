@@ -237,6 +237,76 @@ class TicketManageView(discord.ui.View):
         await interaction.response.send_message(embed=embed)
 
 
+    
+
+    @discord.ui.button(
+        label="Lock",
+        emoji="🔒",
+        style=discord.ButtonStyle.secondary,
+        custom_id="ticket_lock"
+    )
+    async def lock_ticket(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button
+    ):
+
+        metadata = get_ticket_metadata(interaction.channel.id)
+
+        if not metadata:
+            await interaction.response.send_message(
+                "Ticket metadata not found.",
+                ephemeral=True
+            )
+            return
+
+        member = interaction.guild.get_member(metadata["owner_id"])
+
+        if member:
+            await interaction.channel.set_permissions(
+                member,
+                send_messages=False
+            )
+
+        await interaction.response.send_message(
+            f"🔒 Ticket locked by {interaction.user.mention}"
+        )
+
+
+    @discord.ui.button(
+        label="Unlock",
+        emoji="🔓",
+        style=discord.ButtonStyle.success,
+        custom_id="ticket_unlock"
+    )
+    async def unlock_ticket(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button
+    ):
+
+        metadata = get_ticket_metadata(interaction.channel.id)
+
+        if not metadata:
+            await interaction.response.send_message(
+                "Ticket metadata not found.",
+                ephemeral=True
+            )
+            return
+
+        member = interaction.guild.get_member(metadata["owner_id"])
+
+        if member:
+            await interaction.channel.set_permissions(
+                member,
+                send_messages=True
+            )
+
+        await interaction.response.send_message(
+            f"🔓 Ticket unlocked by {interaction.user.mention}"
+        )
+
+
     @discord.ui.button(
         label="Close Ticket",
         emoji="🔒",
