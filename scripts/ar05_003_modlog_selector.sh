@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+set -e
+
+cat > views/setup_panel.py <<'PY'
 import discord
 
 from services import settings_service
@@ -101,3 +105,11 @@ class SetupPanel(discord.ui.View):
             "Coming soon.",
             ephemeral=True,
         )
+PY
+
+python -m compileall .
+
+echo
+echo "=================================="
+echo "AR05_003 COMPLETE"
+echo "=================================="
