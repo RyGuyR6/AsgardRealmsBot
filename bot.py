@@ -5,7 +5,7 @@
 
 from services.logger import setup_logging
 from services import settings_service
-
+from cogs import setup
 import logging
 
 import discord
