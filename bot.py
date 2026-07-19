@@ -4,6 +4,7 @@
 # ============================================================
 
 from services.logger import setup_logging
+from services import settings_service
 
 import logging
 

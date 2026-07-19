@@ -57,7 +57,7 @@ def register(bot):
                 ephemeral=True
             )
 
-        warning_service.add_warning(
+        warning_id, case_id = warning_service.add_warning(
             interaction.guild.id,
             member.id,
             interaction.user.id,
@@ -87,6 +87,18 @@ def register(bot):
         embed.add_field(
             name="Total Warnings",
             value=str(total)
+        )
+
+        embed.add_field(
+            name="Warning ID",
+            value=f"#{warning_id}",
+            inline=True
+        )
+
+        embed.add_field(
+            name="Case ID",
+            value=f"#{case_id}",
+            inline=True
         )
 
         await interaction.response.send_message(
@@ -558,6 +570,55 @@ def register(bot):
 
         await interaction.response.send_message(
             embed=embed
+        )
+
+
+
+    @bot.tree.command(
+        name="cases",
+        description="View a member's moderation history."
+    )
+    @app_commands.default_permissions(
+        moderate_members=True
+    )
+    async def cases(
+        interaction: discord.Interaction,
+        member: discord.Member
+    ):
+
+        rows = warning_service.get_cases(member.id)
+
+        if not rows:
+            return await interaction.response.send_message(
+                embed=make_embed(
+                    "📁 Case History",
+                    f"{member.mention} has no moderation cases."
+                ),
+                ephemeral=True
+            )
+
+        embed = make_embed(
+            "📁 Moderation History",
+            f"Showing the latest {min(len(rows),10)} cases for {member.mention}"
+        )
+
+        for case_id, action, moderator_id, reason, created in rows[:10]:
+
+            reason = reason if len(reason) <= 50 else reason[:47] + "..."
+
+            embed.add_field(
+                name=f"Case #{case_id} • {action}",
+                value=(
+                    f"Moderator: `{moderator_id}`\n"
+                    f"Reason: {reason}\n"
+                    f"Date: {created}"
+                ),
+                inline=False
+            )
+
+        await interaction.response.send_message(
+            embed=embed,
+            ephemeral=True
         )
 
 
