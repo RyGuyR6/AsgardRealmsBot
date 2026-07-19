@@ -21,8 +21,6 @@ def register(bot):
     )
     async def ticketpanel(interaction: discord.Interaction):
 
-        await interaction.response.defer(ephemeral=True)
-
         embed = make_embed(
             "⚔ Odin Support Center",
             """
@@ -56,7 +54,7 @@ Click one of the buttons below to create your ticket.
             text="Asgard Realms • Powered by Odin"
         )
 
-        await interaction.followup.send(
+        await interaction.response.send_message(
             embed=embed,
             file=file,
             view=TicketView()

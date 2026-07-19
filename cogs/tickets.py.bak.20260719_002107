@@ -21,8 +21,6 @@ def register(bot):
     )
     async def ticketpanel(interaction: discord.Interaction):
 
-        await interaction.response.defer(ephemeral=True)
-
         embed = make_embed(
             "⚔ Odin Support Center",
             """
