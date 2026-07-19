@@ -11,7 +11,7 @@ from config import (
     SERVER_IP,
 )
 
-WELCOME_BANNER = "assets/odin_welcome.PNG"
+WELCOME_BANNER = "assets/odin_banner.PNG"
 
 
 # ============================================================
@@ -55,7 +55,7 @@ Visit the **Odin Support Center**.
     )
 
     embed.set_image(
-        url="attachment://odin_welcome.PNG"
+        url="attachment://odin_banner.PNG"
     )
 
     return embed
@@ -89,5 +89,5 @@ def welcome_banner():
 
     return discord.File(
         WELCOME_BANNER,
-        filename="odin_welcome.PNG"
+        filename="odin_banner.PNG"
     )
