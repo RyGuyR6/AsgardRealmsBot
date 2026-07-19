@@ -3,6 +3,8 @@
 #                         bot.py
 # ============================================================
 
+from services.logger import setup_logging
+
 import logging
 
 import discord
@@ -28,10 +30,7 @@ from cogs.welcome import register as register_welcome
 #                        LOGGING
 # ============================================================
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)s] %(message)s"
-)
+setup_logging()
 
 log = logging.getLogger("Odin")
 
