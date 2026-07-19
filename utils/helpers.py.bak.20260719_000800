@@ -88,7 +88,7 @@ async def create_text_channel(category, channel_name):
 
     guild = category.guild
 
-    overwrites = {}
+    overwrites = None
 
     # ========================================================
     # Private Odin Ticket Logs
@@ -125,15 +125,10 @@ async def create_text_channel(category, channel_name):
     # Create Channel
     # ========================================================
 
-    if overwrites:
-        channel = await category.create_text_channel(
-            channel_name,
-            overwrites=overwrites
-        )
-    else:
-        channel = await category.create_text_channel(
-            channel_name
-        )
+    channel = await category.create_text_channel(
+        channel_name,
+        overwrites=overwrites
+    )
 
     log.info(f"✅ Created channel: {channel_name}")
 
