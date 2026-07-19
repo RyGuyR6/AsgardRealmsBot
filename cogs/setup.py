@@ -3,6 +3,7 @@ from discord import app_commands
 
 from embeds import make_embed
 from services import settings_service
+from views.setup_panel import SetupPanel
 
 
 def register(bot):
@@ -65,5 +66,6 @@ def register(bot):
 
         await interaction.response.send_message(
             embed=embed,
+            view=SetupPanel(),
             ephemeral=True
         )
